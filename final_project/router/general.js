@@ -54,3 +54,18 @@ public_users.get('/author/:author', async function (req, res) {
         res.status(404).json({ message: error });
     }
 });
+
+// Task 13: Get book details based on Title using Async-Await
+public_users.get('/title/:title', async function (req, res) {
+    const title = req.params.title;
+    try {
+        const response = await new Promise((resolve, reject) => {
+            const filteredBooks = Object.values(books).filter(b => b.title === title);
+            if (filteredBooks.length > 0) resolve(filteredBooks);
+            else reject("Title not found");
+        });
+        res.status(200).send(JSON.stringify(response, null, 4));
+    } catch (error) {
+        res.status(404).json({ message: error });
+    }
+});
