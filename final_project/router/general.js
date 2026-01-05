@@ -39,3 +39,18 @@ public_users.get('/isbn/:isbn', function (req, res) {
         .then((book) => res.status(200).send(JSON.stringify(book, null, 4)))
         .catch((err) => res.status(404).json({ message: err }));
 });
+
+// Task 12: Get book details based on Author using Async-Await
+public_users.get('/author/:author', async function (req, res) {
+    const author = req.params.author;
+    try {
+        const response = await new Promise((resolve, reject) => {
+            const filteredBooks = Object.values(books).filter(b => b.author === author);
+            if (filteredBooks.length > 0) resolve(filteredBooks);
+            else reject("Author not found");
+        });
+        res.status(200).send(JSON.stringify(response, null, 4));
+    } catch (error) {
+        res.status(404).json({ message: error });
+    }
+});
